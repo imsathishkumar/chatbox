@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join Room</title>
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+  <body>
+    <section class="container">
+      <h1>ChatBox</h1>
+      <form action="/checkRoom" method="post">
+        <div class="flex">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Enter username..."
+            required
+          />
+        </div>
+        <div class="flex">
+          <label for="room">Room</label>
+          <input
+            type="text"
+            name="room"
+            id="room"
+            placeholder="Enter roomname..."
+            required
+            readonly
+          />
+        </div>
+        <div class="flex">
+          <label for="roompassword">Room Password</label>
+          <input
+            type="password"
+            name="roompassword"
+            id="roompassword"
+            placeholder="Enter roompassword..."
+            required
+            readonly
+          />
+        </div>
+        <button type="submit">Join Room</button>
+      </form>
+    </section>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
+      integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      const { username, room, roompassword } = Qs.parse(location.search, {
+        ignoreQueryPrefix: true,
+      });
+
+      document.getElementById("room").value = room;
+      document.getElementById("roompassword").value = roompassword;
+
+    </script>
+  </body>
+</html>

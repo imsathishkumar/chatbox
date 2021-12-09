@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatBox</title>
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+  <body>
+    <section class="container">
+      <h1>ChatBox</h1>
+      <form action="/createRoom" method="post">
+        <div class="flex">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Enter username..."
+            required
+          />
+        </div>
+        <div class="flex">
+          <label for="room">Room</label>
+          <input
+            type="text"
+            name="room"
+            id="room"
+            placeholder="Enter roomname..."
+            required
+          />
+        </div>
+        <div class="flex">
+          <label for="roompassword">Room Password</label>
+          <input
+            type="text"
+            name="roompassword"
+            id="roompassword"
+            placeholder="Enter roompassword..."
+            required
+          />
+        </div>
+        <button type="submit">Create Room</button>
+      </form>
+    </section>
+  </body>
+</html>
