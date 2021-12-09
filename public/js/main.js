@@ -4,16 +4,25 @@ const { username, room, roompassword } = Qs.parse(location.search, {
 
 console.log(username, room, roompassword);
 
-let link = `http://localhost:3000/join.html?&room=${room}&roompassword=${roompassword}`;
-
-document
-  .getElementById("link-btn")
-  .addEventListener("click", () => navigator.clipboard.writeText(link));
+document.getElementById("link-btn").addEventListener("click", async () => {
+  const response = await fetch('/generate', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      room: room,
+      roompassword: roompassword
+    })
+  });
+  let link = await response.text();
+  navigator.clipboard.writeText(link);
+});
 
 const chatForm = document.getElementById("chat-form");
 const chatMessages = document.querySelector(".chat-messages");
 const roomName = document.getElementById("room-name");
-// const userList = document.getElementById("users");
 
 const socket = io();
 
@@ -62,7 +71,7 @@ function outputMessage(message) {
   const p = document.createElement("p");
   p.classList.add("meta");
   p.innerText = message.username;
-  p.innerHTML += `<span>${message.time}</span>`;
+  p.innerHTML += `<span> ${message.time}</span>`;
   div.appendChild(p);
   const para = document.createElement("p");
   para.classList.add("text");
@@ -76,11 +85,4 @@ function outputRoomName(room) {
   roomName.innerText = room;
 }
 
-//Prompt the user before leave chat room
-document.getElementById("leave-btn").addEventListener("click", () => {
-  const leaveRoom = confirm("Are you sure you want to leave the chatroom?");
-  if (leaveRoom) {
-    window.location = "../index.html";
-  } else {
-  }
-});
+

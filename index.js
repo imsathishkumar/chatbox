@@ -5,6 +5,7 @@ const socketio = require("socket.io");
 const formatMessage = require("./utils/messages");
 const {Room} = require("./model/chatRoom");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const { userJoin, getCurrentUser, userLeave } = require("./utils/users");
 const app = express();
@@ -12,7 +13,7 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 mongoose
-  .connect("mongodb://localhost:27017/chatApp")
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB..."))
   .catch((err) => console.error("Could not connect to MongoDB..."));
 
@@ -30,7 +31,9 @@ app.use("/createRoom", async(req, res) => {
     return  res.redirect("/index.html");
   }
   try {
-    let chatroom = new Room({
+    let chatroom = await Room.findOne({roomName : room});
+    if(chatroom) return res.redirect("/index.html");
+    chatroom = new Room({
       roomName : room,
       password : roompassword
     })
@@ -59,6 +62,12 @@ app.use("/checkRoom", async(req, res) => {
   }
 })
 
+app.use("/generate", (req,res)=>{
+  const {room , roompassword } = req.body;
+  let link = `${process.env.URL}/join.html?&room=${room}&roompassword=${roompassword}`;
+  res.send(link.toString());
+})
+
 // Run when client connects
 io.on("connection", (socket) => {
 
@@ -78,6 +87,7 @@ io.on("connection", (socket) => {
         formatMessage("", `${user.username} has joined the chat`)
       );
 
+      //sending room name
       io.to(user.room).emit('roomUsers', {
         room: user.room,
       });
